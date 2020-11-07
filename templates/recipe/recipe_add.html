@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Multiformset Demo</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <script src="{% static 'js/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'js/jquery.formset.js' %}"></script>
+    
+
+    <script type="text/javascript">
+        $(function() {
+            $(".inline.{{ ingredient_form.prefix }}").formset({
+                prefix: "{{ ingredient_form.prefix }}",
+            })
+            $(".inline.{{ instruction_form.prefix }}").formset({
+                prefix: "{{ instruction_form.prefix }}",
+            })
+        })
+    </script>
+</head>
+
+<body>
+    <div>
+        <h1>Add Recipe</h1>
+        <div class="container">
+            <form action="" method="post">
+            {% csrf_token %}
+            <div class="col-8 mx-auto">
+                {{ form.as_p }}
+            
+            <fieldset>
+                <legend>Recipe Ingredient</legend>
+                {{ ingredient_form.management_form }}
+                {{ ingredient_form.non_form_errors }}
+                {% for form in ingredient_form %}
+                    {{ form.id }}
+                    <div class="inline {{ ingredient_form.prefix }}">
+                        {{ form.description.errors }}
+                        {{ form.description.label_tag }}
+                        {{ form.description }}
+                    </div>
+                {% endfor %}
+            </fieldset>
+            <fieldset>
+                <legend>Recipe instruction</legend>
+                {{ instruction_form.management_form }}
+                {{ instruction_form.non_form_errors }}
+                {% for form in instruction_form %}
+                    {{ form.id }}
+                    <div class="inline {{ instruction_form.prefix }}">
+                        {{ form.number.errors }}
+                        {{ form.number.label_tag }}
+                        {{ form.number }}<br>
+                        {{ form.description.errors }}
+                        {{ form.description.label_tag }}
+                        {{ form.description }}
+                    </div>
+                {% endfor %}
+            </fieldset>
+            <input type="submit" value="Add recipe" class="submit btn btn-outline-info" />
+        </form>
+        </div></div>
+    </div>
+</body>
+</html>
